@@ -1,0 +1,12 @@
+:root {
+    /* Color codes */
+    --bs-blue: #0d6efd;
+    
+    --white-color: #ffffff;
+    --green-color: #13ce66;
+    --dark-grey-color: #555d6d;
+    --dark-bue-color: #222b45;
+    --deep-bue-color: #212b36;
+    --deep-black-color: rgba(0,0,0,0.1);
+    --background-color: #fdfdfd;
+}

@@ -1,4 +1,4 @@
-# 🏃 Exercise Tracker App
+# 🏃 CITS5505 Project: Exercise Tracker App
 
 ## 📌 Purpose of the Application
 
@@ -21,34 +21,98 @@ The application uses a Flask backend with SQLite for data storage and a clean Ja
 
 ## 👥 Group Members
 
-| UWA ID     | Name              | GitHub Username   |
-|------------|-------------------|-------------------|
-| 24452786   | Nhat Vu Phan      | jerryfandev       |
-| [UWA ID]   | [Full Name]       | [githubname]      |
-| [UWA ID]   | [Full Name]       | [githubname]      |
-| [UWA ID]   | [Full Name]       | [githubname]      |
+| UWA ID   | Name                     | GitHub Username |
+|----------|--------------------------|-----------------|
+| 24452786 | Nhat Vu Phan             | jerryfandev     |
+| 24343452 | Muhammad Sulaiman Farooq | msf0005         |
+| [UWA ID] | [Full Name]              | [githubname]    |
+| [UWA ID] | [Full Name]              | [githubname]    |
 
 ---
+## 🚀 Setup & Run Instructions
+### 1. Clone the repository
+```bash
+git clone https://github.com/jerryfandev/exercise-tracker-app.git
+cd exercise-tracker-app
+```
+### 2. Create a Virtual Environment
+```bash
+python -m venv venv
+
+# Activate the environment
+# On macOS/Linux:
+source venv/bin/activate
+
+# On Windows:
+venv\Scripts\activate
+```
+### 3. Install Required Dependencies
+```bash
+pip install -r requirements.txt
+```
+### 4. Run the Flask Application
+```bash
+python run.py
+
+# Or, using the Flask CLI:
+# Set environment variables
+export FLASK_APP=run.py
+export FLASK_ENV=development
+
+# Start the server
+flask run
+```
+### 5. Result
+```
+http://127.0.0.1:5000
+http://localhost:5000
+```
+
+## 📌 Notes
+- `.venv/` and `.idea/` folders are excluded from version control via `.gitignore`.
+- Always activate your virtual environment before running the app or installing dependencies.
 
 ## 📁 Sample Folder Structure (to be updated)
 ```
-project-root/
-├── frontend/
-│   ├── index.html
-│   ├── style.css
-│   └── main.js
+exercise-tracker-app/
+│
 ├── backend/
-│   ├── app.py
-│   ├── routes/
-│   └── templates/
+│   ├── __init__.py
+│   ├── functions.py
+│   └── routes.py
+│
+├── frontend/
+│   ├── asset/
+│   │   ├── favicon.ico
+│   │   └── landing.png
+│   │
+│   ├── css/
+│   │   ├── common.css
+│   │   ├── index.css
+│   │   ├── main.css
+│   │   ├── mobile.css
+│   │   └── presets.css
+│   │
+│   ├── script/
+│   │   ├── login.js
+│   │   └── main.js
+│   │
+│   ├── base.html
+│   ├── dashboard.html
+│   ├── index.html
+│   └── login.html
+│
 ├── tests/
-│   ├── unit/
-│   │   ├── test_backend_logic.py
-│   │   └── test_validation.py
-│   └── selenium/
-│       ├── test_homepage.py
-│       └── test_form_submission.py
+│   ├── selenium/
+│   │   └── test_homepage.py
+│   │
+│   └── unit/
+│       └── test_logic.py
+│
 ├── README.md
-├── .gitignore
 └── requirements.txt
+
 ```
+
+## 📃 License
+MIT License — feel free to use, modify, and share.
