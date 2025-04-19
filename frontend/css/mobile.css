@@ -1,0 +1,8 @@
+/* Responsive CSS for mobile devices */
+
+/* For window less than 600-pixel width */
+@media (max-width: 600px) {
+    body {
+        /*display: block;*/
+    }
+}
