@@ -38,12 +38,16 @@ cd exercise-tracker-app
 ### 2. Create a Virtual Environment
 ```bash
 python -m venv venv
-
-# Activate the environment
-# On macOS/Linux:
+# For different aliases on your machine:
+# python3 -m venv venv
+```
+#### Activate the Virtual Environment:
+###### 🍏 On macOS/Linux:
+```bash
 source venv/bin/activate
-
-# On Windows:
+```
+###### 🪟 On Windows:
+```bash
 venv\Scripts\activate
 ```
 ### 3. Install Required Dependencies
@@ -53,8 +57,9 @@ pip install -r requirements.txt
 ### 4. Run the Flask Application
 ```bash
 python run.py
-
-# Or, using the Flask CLI:
+```
+#### Alternatively, run the app using Flask CLI:
+```bash
 # Set environment variables
 export FLASK_APP=run.py
 export FLASK_ENV=development
