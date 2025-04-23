@@ -1,4 +1,5 @@
-from .functions import *
+from .account import *
+from .dashboard import *
 
 # This file contains the routes for the Flask application.
 def register_routes(app):
@@ -14,3 +15,7 @@ def register_routes(app):
     @app.route('/register', methods=['GET', 'POST'])
     def register():
         return handle_register()
+
+    @app.route('/dashboard', methods=['GET', 'POST'])
+    def dashboard():
+        return init_dashboard()

@@ -1,5 +1,3 @@
-# This file contains the functions used in the backend of the application.
-
 from flask import request, jsonify, render_template
 
 def handle_login():

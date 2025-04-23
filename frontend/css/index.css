@@ -1,3 +1,10 @@
+body.landing-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background-color);
+}
+
 .welcome-container {
     max-width: 700px;
     width: 95%;
