@@ -3,10 +3,32 @@
     --bs-blue: #0d6efd;
     
     --white-color: #ffffff;
-    --green-color: #13ce66;
     --dark-grey-color: #555d6d;
     --dark-bue-color: #222b45;
     --deep-bue-color: #212b36;
     --deep-black-color: rgba(0,0,0,0.1);
     --background-color: #fdfdfd;
+
+    --red-color: red;
+    --main-color: #f1f5f9;
+    --secondary-color: #f6f6f6;
+    --third-color: #888;
+    --blue-color: #0075ff;
+    --orange-color: #f59e0b;
+    --green-color: #22c55e;
+    --eee-color: #eee;
+    --ccc-color: #ccc;
+    --main-margin: 30px;
+    --secondary-margin: 20px;
+    --third-margin: 15px;
+    --fourth-margin: 10px;
+    --fifth-margin: 6px;
+    --main-padding: 30px;
+    --secondary-padding: 20px;
+    --third-padding: 15px;
+    --fourth-padding: 10px;
+    --fifth-padding: 6px;
+    --main-radius: 50px;
+    --first-radius: 10px;
+    --secondary-radius: 6px;
 }

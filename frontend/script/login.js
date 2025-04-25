@@ -19,6 +19,7 @@ $(function () {
                 if (data.success) {
                     // If login is successful, redirect to the dashboard
                     $success.removeClass('d-none');
+                    window.location.href = '/dashboard';
                 } else {
                     // If login fails, show the error message
                     $failure.removeClass('d-none');

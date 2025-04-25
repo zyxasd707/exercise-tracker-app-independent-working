@@ -1,19 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'main-base.html' %}
 
 {% block title %}Dashboard - Exercise Tracker{% endblock %}
 
-{% block content %}
-<div class="welcome-container">
-    <div class="d-flex align-items-center gap-3 mb-2">
-        <div class="logo">
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="11" fill="#2563eb"/>
-                <path d="M12 7l4 5-4 5-4-5 4-5z" fill="#fff"/>
-            </svg>
-        </div>
-        <span class="fs-5 fw-bold text-dark">Dashboard</span>
-    </div>
+{% block page_title %}Dashboard{% endblock %}
 
-    <h1 class="fs-3 fw-bold text-dark mt-3 mb-2">TODO</h1>
+{% block content %}
+<div class="main-content-boxes dashboard">
+    TODO
 </div>
 {% endblock %}

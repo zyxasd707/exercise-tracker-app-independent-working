@@ -62,3 +62,18 @@ def login_required(f):
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
+
+def init_dashboard():
+    if request.method == 'GET':
+        return render_template('dashboard.html')
+    return render_template('login.html')
+
+def init_profile():
+    if request.method == 'GET':
+        return render_template('profile.html')
+    return render_template('login.html')
+
+def init_sharing():
+    if request.method == 'GET':
+        return render_template('sharing.html')
+    return render_template('login.html')
