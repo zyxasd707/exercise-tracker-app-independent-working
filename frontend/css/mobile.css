@@ -1,8 +1,106 @@
 /* Responsive CSS for mobile devices */
+@media (max-width: 767px) {
+    .page-content {
+        grid-template-columns: 0 1fr;
+    }
+}
 
-/* For window less than 600-pixel width */
-@media (max-width: 600px) {
-    body {
-        /*display: block;*/
+@media (max-width: 767px) {
+    .sidebar {
+        z-index: 1000;
+        transform: translateX(-220px);
+        -ms-transform: translateX(-220px);
+    }
+}
+
+@media (min-width: 768px) {
+    .sidebar .xmark {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .sidebar .brand {
+        margin: 10px;
+    }
+}
+
+@media (max-width: 767px) {
+    .sidebar .brand h3 {
+        font-size: 1rem;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 767px) {
+    .sidebar .brand::before,
+    .sidebar .brand::after {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .sidebar ul li a i {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .main-content-boxes .box.first-box .box-section1 {
+        padding: var(--main-padding);
+    }
+}
+
+@media (max-width: 767px) {
+    .main-content-boxes .box .box-section1 .box-title h2 {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .main-content-boxes .box.first-box .box-section1 .box-title p {
+        text-align: center;
+    }
+}
+
+@media (max-width: 767px) {
+    .main-content-boxes .box .box-section1 img:nth-child(1) {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .main-content-boxes .box.first-box .box-section1 .avatar {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 767px) {
+    .main-content-boxes .box .box-section2 ul {
+        flex-direction: column;
+        gap: var(--fourth-padding);
+    }
+}
+
+@media (min-width: 768px) {
+    .header .bar-item {
+        display: none;
+    }
+}
+
+@media (max-width: 1180px) {
+    .main-content-boxes {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 1180px) {
+    .custom-cell {
+        width: 100%;
+    }
+    .main-content-boxes .box {
+        height: auto;
     }
 }
