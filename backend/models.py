@@ -55,3 +55,19 @@ class User(db.Model):
             bool: True if password matches, False otherwise
         """
         return check_password_hash(self.password_hash, password)
+    
+class ExerciseLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    exercise_type = db.Column(db.String(50), nullable=False)  
+    duration = db.Column(db.Integer, nullable=False)  # Duration in minutes
+    calories = db.Column(db.Integer, nullable=False) 
+    date = db.Column(db.DateTime, default=datetime.utcnow)  # Date of the exercise 
+
+
+class Achievement(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    exercise_type = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String(255), nullable=False)
+    achieved_at = db.Column(db.DateTime, default=datetime.utcnow)

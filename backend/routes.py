@@ -34,3 +34,15 @@ def register_routes(app):
     def logout():
         session.pop('user_id', None)
         return redirect(url_for('home'))
+    
+
+    @app.route('/exercise_log', methods=['GET', 'POST'])
+    @login_required
+    def exercise_log():
+        return handle_exercise_log()
+    
+    @app.route('/achievement')
+    @login_required
+    def achievement():
+        return handle_achievement()
+    
