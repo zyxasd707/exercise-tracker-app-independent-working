@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate  # Import Migrate
 from .models import db
 import os
 
@@ -23,12 +24,17 @@ def create_app():
     
     # Initialize the Database
     db.init_app(app)
-    
-    # Crease Database Table
-    with app.app_context():
-        db.create_all()
-    
+
+
+    # Initialize Flask-Migrate
+    migrate = Migrate(app, db)
+
+    # Removed db.create_all() as Flask-Migrate will handle schema updates
+    # with app.app_context():
+    #     db.create_all()  # Flask-Migrate will take care of this
+
     from .routes import register_routes
     register_routes(app)
     
     return app
+

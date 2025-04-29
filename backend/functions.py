@@ -1,6 +1,11 @@
-from flask import request, jsonify, render_template, session, redirect, url_for
-from .models import db, User, ExerciseLog, Achievement
+
+from flask import request, jsonify, render_template, session, redirect, url_for, flash
+from .models import db, User
 from functools import wraps
+from datetime import datetime
+from werkzeug.security import check_password_hash
+
+
 
 def handle_login():
     if request.method == 'POST':
@@ -68,10 +73,96 @@ def init_dashboard():
         return render_template('dashboard.html')
     return render_template('login.html')
 
+
+
 def init_profile():
-    if request.method == 'GET':
-        return render_template('profile.html')
-    return render_template('login.html')
+    # Debug: Check method
+    print("METHOD:", request.method)
+
+    # Ensure the user is logged in
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    # Get the current user from the session
+    user = User.query.get(session['user_id'])
+
+    # Handle profile update when the form is submitted (POST method)
+    if request.method == 'POST':
+        current_password = request.form.get('current_password')
+
+        # Check if current password is provided
+        if not current_password:
+            flash('Current password is required to update profile.', 'danger')
+            return redirect(url_for('profile'))
+
+        # Verify if the provided password matches the stored password
+        if not user.check_password(current_password):
+            flash('Incorrect password. Please try again.', 'danger')
+            return redirect(url_for('profile'))
+
+        # Debug: Check form data
+        print("Form Data Received:")
+        print(f"New Username: {request.form.get('username')}")
+        print(f"New Email: {request.form.get('email')}")
+        print(f"New Full Name: {request.form.get('full_name')}")
+        print(f"New DOB: {request.form.get('dob')}")
+        print(f"New Gender: {request.form.get('gender')}")
+        print(f"New Height: {request.form.get('height_cm')}")
+        print(f"New Weight: {request.form.get('weight_kg')}")
+
+        # Process form data and update user fields if new data is provided
+        new_username = request.form.get('username')
+        new_email = request.form.get('email')
+        new_full_name = request.form.get('full_name')
+        new_dob = request.form.get('dob')
+        new_gender = request.form.get('gender')
+        new_height_cm = request.form.get('height_cm')
+        new_weight_kg = request.form.get('weight_kg')
+
+        if new_username:
+            user.username = new_username
+        if new_email:
+            user.email = new_email
+        if new_full_name:
+            user.full_name = new_full_name
+        if new_dob:
+            try:
+                user.dob = datetime.strptime(new_dob, '%Y-%m-%d').date()  # Update DOB if valid
+            except ValueError:
+                flash('Invalid DOB format. Please enter in YYYY-MM-DD format.', 'danger')
+                return redirect(url_for('profile'))
+        if new_gender:
+            user.gender = new_gender
+        if new_height_cm:
+            try:
+                user.height_cm = float(new_height_cm)  # Convert height to float
+            except ValueError:
+                flash('Invalid height format. Please enter a valid number.', 'danger')
+                return redirect(url_for('profile'))
+        if new_weight_kg:
+            try:
+                user.weight_kg = float(new_weight_kg)  # Convert weight to float
+            except ValueError:
+                flash('Invalid weight format. Please enter a valid number.', 'danger')
+                return redirect(url_for('profile'))
+
+        # Commit the changes to the database
+        try:
+            db.session.commit()
+            flash('Profile updated successfully!', 'success')
+            return redirect(url_for('profile'))  # Redirect to profile page to see updated data
+        except Exception as e:
+            print(f"Error during commit: {e}")  # Debugging: Print the error
+            db.session.rollback()
+            flash('Profile update failed. Please try again later.', 'danger')
+            return redirect(url_for('profile'))
+
+    # If GET request, just render the profile page with the user's current data
+    return render_template('profile.html', user=user)
+
+
+
+
 
 def init_sharing():
     if request.method == 'GET':
