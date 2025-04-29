@@ -1,5 +1,5 @@
 from flask import request, jsonify, render_template, session, redirect, url_for
-from .models import db, User
+from .models import db, User, ExerciseLog, Achievement
 from functools import wraps
 
 def handle_login():
@@ -77,3 +77,43 @@ def init_sharing():
     if request.method == 'GET':
         return render_template('sharing.html')
     return render_template('login.html')
+
+
+def handle_exercise_log():
+        if request.method == 'POST':
+            # Validate input
+            exercise_type = request.form['exercise_type']
+            duration = int(request.form['duration'])
+            calories = int(request.form['calories'])
+            user_id = session['user_id']
+            
+            log = ExerciseLog(user_id=user_id, exercise_type=exercise_type, duration=duration, calories=calories)
+            db.session.add(log)
+            db.session.commit()
+            
+            
+            total_duration = db.session.query(db.func.sum(ExerciseLog.duration))\
+                .filter_by(user_id=user_id, exercise_type=exercise_type).scalar() or 0
+            
+            
+            if total_duration >= 100:
+                achievement_exists = Achievement.query.filter_by(user_id=user_id, exercise_type=exercise_type).first()
+                if not achievement_exists:
+                    achievement = Achievement(
+                        user_id=user_id,
+                        exercise_type=exercise_type,
+                        description=f"Completed 100 minutes of {exercise_type}!")
+                    
+                    db.session.add(achievement)
+                    db.session.commit()
+                    
+            
+            return redirect(url_for('exercise_log'))
+        
+        return render_template('exercise_log.html')
+
+
+def handle_achievement():
+        user_id = session['user_id']
+        achievements = Achievement.query.filter_by(user_id=user_id).all()
+        return render_template('achievement.html', achievements=achievements)

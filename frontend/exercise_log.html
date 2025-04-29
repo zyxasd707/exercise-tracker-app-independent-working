@@ -1,0 +1,34 @@
+{% extends 'main-base.html' %}
+
+{% block title %}Exercise Log - Exercise Tracker{% endblock %}
+
+{% block page_title %}Ecercise Log{% endblock %}
+
+{% block content %}
+<div class="main-content-boxes profile">
+    <form method="post" action="/exercise_log">
+        <div>
+            <label for="exercise_type">Exercise Type</label>
+            <select class="form-primary" id="exercise_type" name="exercise_type" required>
+                <option value="running">Running</option>
+                <option value="cycling">Cycling</option>
+                <option value="swimming">Swimming</option>
+                <option value="yoga">Yoga</option>
+                <option value="others">Others</option>
+            </select>
+        </div><br><br>
+    
+        <div>
+            <label for="duration">Duration (minutes)</label>
+            <input type="number" class="form-primary" id="duration" name="duration" required min="1">
+        </div><br><br>
+
+        <div>
+            <label for="calories">Calories Burned</label>
+            <input type="number" class="form-primary" id="calories" name="calories" required min="1">
+        </div>
+    
+        <button type="submit">Submit Exercise</button>
+    </form>
+</div>
+{% endblock %}

@@ -26,7 +26,7 @@ The application uses a Flask backend with SQLite for data storage and a clean Ja
 | 24452786 | Nhat Vu Phan             | jerryfandev     |
 | 24343452 | Muhammad Sulaiman Farooq | msf0005         |
 | 24267814 | Yuxing Zhou              | zyxasd707       |
-| [UWA ID] | [Full Name]              | [githubname]    |
+| 23218511 | Nuowei Li                | nuoweili        |
 
 ---
 ## 🚀 Setup & Run Instructions
