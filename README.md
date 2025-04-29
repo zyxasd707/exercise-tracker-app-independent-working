@@ -54,7 +54,23 @@ venv\Scripts\activate
 ```bash
 pip install -r requirements.txt
 ```
-### 4. Run the Flask Application
+### 4. Initialize / Migrate the Database
+```bash
+# Initialize migrations directory (only once)
+flask db init
+
+# Generate migration script based on current models
+flask db migrate -m "Initial migration"
+
+# Apply the migration to the database
+flask db upgrade
+
+# 💡 Note: Ensure to export FLASK_APP=run.py
+# macOS/Linux: export FLASK_APP=run.py
+# Windows CMD: set FLASK_APP=run.py
+# Windows PowerShell: $env:FLASK_APP = "run.py"
+```
+### 5. Run the Flask Application
 ```bash
 python run.py
 ```
@@ -67,7 +83,7 @@ export FLASK_ENV=development
 # Start the server
 flask run
 ```
-### 5. Result
+### 6. Result
 ```
 http://127.0.0.1:5000
 http://localhost:5000
@@ -84,12 +100,15 @@ exercise-tracker-app/
 ├── backend/
 │   ├── __init__.py
 │   ├── functions.py
+│   ├── models.py
 │   └── routes.py
 │
 ├── frontend/
 │   ├── asset/
+│   │   ├── avatar.png
 │   │   ├── favicon.ico
-│   │   └── landing.png
+│   │   ├── landing.png
+│   │   └── welcome.png
 │   │
 │   ├── css/
 │   │   ├── common.css
@@ -99,13 +118,22 @@ exercise-tracker-app/
 │   │   └── presets.css
 │   │
 │   ├── script/
+│   │   ├── common.js
+│   │   ├── dashboard.js
 │   │   ├── login.js
-│   │   └── main.js
+│   │   ├── main.js
+│   │   └── register.js
 │   │
+│   ├── achievement.html
 │   ├── base.html
 │   ├── dashboard.html
+│   ├── exercise_log.html
 │   ├── index.html
-│   └── login.html
+│   ├── login.html
+│   ├── main-base.html
+│   ├── profile.html
+│   ├── register.html
+│   └── sharing.html
 │
 ├── tests/
 │   ├── selenium/
@@ -114,6 +142,7 @@ exercise-tracker-app/
 │   └── unit/
 │       └── test_logic.py
 │
+├── run.py
 ├── README.md
 └── requirements.txt
 
