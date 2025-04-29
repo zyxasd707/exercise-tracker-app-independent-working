@@ -9,7 +9,7 @@
     <h2>Your Achievements</h2>
     <ul>
         {% for achievement in achievements %}
-        <li>{{ achievement.description }} ({{ achievement.achieved_at.strftime('%Y-%m-%d') }})</li>
+        <li>{{achievement.description}} ({{achievement.achieved_at.strftime('%Y-%m-%d %H:%M')}})</li>
         {% endfor %}
     </ul>
 </div>

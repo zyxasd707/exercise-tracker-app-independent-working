@@ -9,7 +9,7 @@
     <form method="post" action="/exercise_log">
         <div>
             <label for="exercise_type">Exercise Type</label>
-            <select class="form-primary" id="exercise_type" name="exercise_type" required>
+            <select id="exercise_type" name="exercise_type" required>
                 <option value="running">Running</option>
                 <option value="cycling">Cycling</option>
                 <option value="swimming">Swimming</option>
@@ -20,15 +20,37 @@
     
         <div>
             <label for="duration">Duration (minutes)</label>
-            <input type="number" class="form-primary" id="duration" name="duration" required min="1">
+            <input type="number" id="duration" name="duration" required min="1">
         </div><br><br>
 
         <div>
             <label for="calories">Calories Burned</label>
             <input type="number" class="form-primary" id="calories" name="calories" required min="1">
         </div>
+        <br><br>
     
         <button type="submit">Submit Exercise</button>
     </form>
+    <br><br>
+
+    <h3>Your Exercise Logs</h3> <br>
+    <table>
+        <tr>
+            <th>Exercise Type</th>
+            <th>Duration (minutes)</th>
+            <th>Calories Burned</th>
+            <th>Date</th>
+        </tr>
+        {% for log in logs %}
+        <tr>
+            <td>{{log.exercise_type}}</td>
+            <td>{{log.duration}}</td>
+            <td>{{log.calories}}</td>
+            <td>{{log.date.strftime('%Y-%m-%d %H:%M')}}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
 </div>
 {% endblock %}
