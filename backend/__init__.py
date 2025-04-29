@@ -25,10 +25,11 @@ def create_app():
     # Initialize the Database
     db.init_app(app)
 
+
     # Initialize Flask-Migrate
     migrate = Migrate(app, db)
 
-    # Remove db.create_all() as Flask-Migrate will handle schema updates
+    # Removed db.create_all() as Flask-Migrate will handle schema updates
     # with app.app_context():
     #     db.create_all()  # Flask-Migrate will take care of this
 
@@ -36,3 +37,4 @@ def create_app():
     register_routes(app)
     
     return app
+

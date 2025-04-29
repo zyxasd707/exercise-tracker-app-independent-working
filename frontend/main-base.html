@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Exercise Tracker{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='asset/favicon.ico') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+<div class="page-content index-page">
+    <div class="sidebar">
+        <div class="brand">
+            <i class="fa-solid fa-xmark xmark"></i>
+            <h3 class="brand-name">CITS5505</h3>
+        </div>
+        <ul>
+            <li>
+                <a id="/dashboard" href="{{ url_for('dashboard') }}" class="sidebar-link">
+                    <i class="fa-regular fa-chart-bar fa-fw"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a id="/profile" href="{{ url_for('profile') }}" class="sidebar-link">
+                    <i class="fa-regular fa-user fa-fw"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
+            <li>
+                <a id="/sharing" href="{{ url_for('sharing') }}" class="sidebar-link">
+                    <i class="fa-regular fa-circle-user fa-fw"></i
+                    ><span>Sharing</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <main>
+        <div class="header">
+            <i class="fa-solid fa-bars bar-item"></i>
+            <div></div>
+
+            <div class="profile">
+                <div class="title">
+                    <h5>{% block page_title %}{% endblock %}</h5>
+                </div>
+                <div>
+                    <img src="{{ url_for('static', filename='asset/avatar.png') }}" alt="No Image" />
+                </div>
+            </div>
+        </div>
+        <div class="main-content">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+</div>
+<script src="{{ url_for('static', filename='script/common.js') }}"></script>
+</body>
+</html>

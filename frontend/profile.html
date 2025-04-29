@@ -1,10 +1,12 @@
 {% extends 'main-base.html' %}
 
 {% block title %}Profile - Exercise Tracker{% endblock %}
+
 {% block page_title %}Profile{% endblock %}
 
 {% block content %}
 <div class="main-content-boxes profile">
+
     <!-- Display Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -98,5 +100,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
 
 {% endblock %}

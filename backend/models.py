@@ -20,11 +20,13 @@ class User(db.Model):
     # Email field - must be unique and is required
     email = db.Column(db.String(120), unique=True, nullable=False)
     
+
     full_name = db.Column(db.String(120), nullable=True)
     dob = db.Column(db.Date, nullable=True)
     gender = db.Column(db.String(10), nullable=True)
     height_cm = db.Column(db.Float, nullable=True)
     weight_kg = db.Column(db.Float, nullable=True)
+
 
 
     # Stores the hashed password (not the actual password)

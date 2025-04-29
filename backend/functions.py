@@ -72,15 +72,7 @@ def init_dashboard():
         return render_template('dashboard.html')
     return render_template('login.html')
 
-from datetime import datetime
-from flask import request, render_template, flash, redirect, url_for, session
-from werkzeug.security import check_password_hash
-from .models import db, User
 
-from flask import request, jsonify, render_template, session, redirect, url_for, flash
-from .models import db, User
-from werkzeug.security import check_password_hash
-from datetime import datetime
 
 def init_profile():
     # Debug: Check method

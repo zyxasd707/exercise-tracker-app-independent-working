@@ -1,0 +1,59 @@
+{% extends 'main-base.html' %}
+
+{% block title %}Dashboard - Exercise Tracker{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="main-content-boxes dashboard container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6 mb-4 custom-cell">
+            <div class="box first-box">
+                <div class="box-section1">
+                    <div class="box-title">
+                        <h2>Welcome</h2>
+                        <p>Group 55</p>
+                    </div>
+                    <div class="box-image">
+                        <img src="{{ url_for('static', filename='asset/welcome.png') }}" alt="No image" />
+                    </div>
+                    <img src="{{ url_for('static', filename='asset/avatar.png') }}" alt="No image" class="avatar" />
+                </div>
+                <div class="box-section2">
+                    <ul>
+                        <li>
+                            <span>Group-55 CITS5505</span>
+                            <p>Agile Developers</p>
+                        </li>
+                        <li>
+                            <span>88</span>
+                            <p>Exercises</p>
+                        </li>
+                        <li>
+                            <span>20,000</span>
+                            <p>Kcal burned</p>
+                        </li>
+                    </ul>
+                </div>
+                <a href="./pages/Profile.html">Profile </a>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 mb-4 custom-cell">
+            <div class="box">
+                <canvas id="myChart" class="w-100" height="400"></canvas>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 mb-4 custom-cell">
+            <div class="box">
+                <canvas id="weightChart" class="w-100" height="400"></canvas>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 mb-4 custom-cell">
+            <div class="box">
+                <canvas id="bubbleChart" class="w-100" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='script/dashboard.js') }}"></script>
+{% endblock %}
