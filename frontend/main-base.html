@@ -17,37 +17,39 @@
     <div class="sidebar">
         <div class="brand">
             <i class="fa-solid fa-xmark xmark"></i>
-            <h3 class="brand-name">CITS5505</h3>
+            <a class="brand-name cursor-pointer" href="{{ url_for('dashboard') }}">
+                <span>CITS5505</span>
+            </a>
         </div>
         <ul>
             <li>
                 <a id="/dashboard" href="{{ url_for('dashboard') }}" class="sidebar-link">
-                    <i class="fa-regular fa-chart-bar fa-fw"></i>
+                    <i class="fa-solid fa-square-poll-horizontal"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
             <li>
                 <a id="/profile" href="{{ url_for('profile') }}" class="sidebar-link">
-                    <i class="fa-regular fa-user fa-fw"></i>
+                    <i class="fa-solid fa-user"></i>
                     <span>Profile</span>
                 </a>
             </li>
             <li>
                 <a id="/sharing" href="{{ url_for('sharing') }}" class="sidebar-link">
-                    <i class="fa-regular fa-circle-user fa-fw"></i
-                    ><span>Sharing</span>
+                    <i class="fa-solid fa-share-from-square"></i>
+                    <span>Sharing</span>
                 </a>
             </li>
             <li>
                 <a id="/exercise_log" href="{{ url_for('exercise_log') }}" class="sidebar-link">
-                    <i class="fa-regular fa-circle-user fa-fw"></i
-                    ><span>Exercise Log</span>
+                    <i class="fa-solid fa-dumbbell"></i>
+                    <span>Exercise Log</span>
                 </a>
             </li>
             <li>
                 <a id="/achievement" href="{{ url_for('achievement') }}" class="sidebar-link">
-                    <i class="fa-regular fa-circle-user fa-fw"></i
-                    ><span>Achievement</span>
+                    <i class="fa-solid fa-trophy"></i>
+                    <span>Achievement</span>
                 </a>
             </li>
         </ul>

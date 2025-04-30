@@ -1,10 +1,8 @@
-
 from flask import request, jsonify, render_template, session, redirect, url_for, flash
 from .models import db, User
 from functools import wraps
 from datetime import datetime
 from werkzeug.security import check_password_hash
-
 
 
 def handle_login():
@@ -25,6 +23,7 @@ def handle_login():
         return jsonify(success=False)
     
     return render_template('login.html')
+
 
 def handle_register():
     if request.method == 'POST':
@@ -66,9 +65,11 @@ def handle_register():
     
     return render_template('register.html')
 
+
 # This function checks if the user is an admin.
 def is_admin(username, password):
     return username == "admin" and password == "admin"
+
 
 # Authentication decorator
 def login_required(f):
@@ -79,11 +80,11 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+
 def init_dashboard():
     if request.method == 'GET':
         return render_template('dashboard.html')
     return render_template('login.html')
-
 
 
 def init_profile():
@@ -172,12 +173,20 @@ def init_profile():
     return render_template('profile.html', user=user)
 
 
-
-
-
 def init_sharing():
     if request.method == 'GET':
-        return render_template('sharing.html')
+        # TODO
+        # Dummy data for shared datasets
+        shared_data = [
+            {
+                'title': f'Dataset {i+1}',
+                'user_name': f'User {i+1}',
+                'user_email': f'user{i+1}@example.com',
+                'shared_date': datetime(2024, 4, (i % 30) + 1).strftime('%d/%m/%Y')
+            }
+            for i in range(20)
+        ]
+        return render_template('sharing.html', shared_data = shared_data)
     return render_template('login.html')
 
 
@@ -240,7 +249,6 @@ def handle_exercise_log():
 
     logs = ExerciseLog.query.filter_by(user_id=user_id).order_by(ExerciseLog.date.desc()).all()
     return render_template('exercise_log.html', logs=logs)
-
 
 
 def handle_achievement():

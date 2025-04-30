@@ -6,6 +6,27 @@
 
 {% block content %}
 <div class="main-content-boxes sharing">
-    TODO
+    <div class="container py-5">
+        <!-- TODO -->
+        <div class="grid-container">
+            {% for data in shared_data %}
+            <div class="card">
+                <div class="dataset-title text-center">
+                    <img
+                        class="avatar mb-3"
+                        width="100"
+                        src="{{ url_for('static', filename='asset/avatar.png') }}"
+                        alt="No image"
+                    />
+                    <h4>{{ data.user_name }}</h4>
+                    <p>{{ data.user_email }}</p>
+                </div>
+                <div class="text-muted">🏆 Finished in <strong>48 minutes</strong> on <strong>March 10, 2024</strong>.<br>
+                    Logged with Garmin Tracker.</div>
+                <div class="share-time small mt-2">{{ data.shared_date }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock %}
