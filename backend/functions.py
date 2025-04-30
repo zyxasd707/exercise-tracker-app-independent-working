@@ -1,5 +1,5 @@
 from flask import request, jsonify, render_template, session, redirect, url_for, flash
-from .models import db, User
+from .models import db, User, ExerciseLog, Achievement
 from functools import wraps
 from datetime import datetime
 from werkzeug.security import check_password_hash
