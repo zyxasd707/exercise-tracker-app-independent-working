@@ -17,16 +17,17 @@ def register_routes(app):
         return handle_register()
 
     @app.route('/dashboard')
-    # Temporarily commented out the login_required decorator
-    # @login_required
+    @login_required
     def dashboard():
         return init_dashboard()
 
     @app.route('/profile', methods=['GET', 'POST'])
+    @login_required
     def profile():
         return init_profile()
 
     @app.route('/sharing', methods=['GET', 'POST'])
+    @login_required
     def sharing():
         return init_sharing()
         
