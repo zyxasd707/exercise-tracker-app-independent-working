@@ -26,8 +26,7 @@ class User(db.Model):
     gender = db.Column(db.String(10), nullable=True)
     height_cm = db.Column(db.Float, nullable=True)
     weight_kg = db.Column(db.Float, nullable=True)
-
-
+    phone = db.Column(db.String(15), unique=True, nullable=True)  # Handle phone number as string to allow for the page of register
 
     # Stores the hashed password (not the actual password)
     password_hash = db.Column(db.String(128), nullable=False)
