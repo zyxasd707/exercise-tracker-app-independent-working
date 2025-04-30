@@ -31,18 +31,29 @@ def handle_register():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
+        phone = request.form.get('phone')  # Add this 'phone' field to the User model and database table.
         
-        # Check if username or email already exists
-        existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
+        # Check if username, email or phone already exists
+        existing_user = User.query.filter(
+            (User.username == username) | 
+            (User.email == email) |
+            (User.phone == phone)  # Add this test to check if the phone number already exists.  
+        ).first()
+            
         if existing_user:
-            # Determine which field is duplicate
             if existing_user.username == username:
                 return jsonify(success=False, message="Username already exists")
-            else:
+            elif existing_user.email == email:
                 return jsonify(success=False, message="Email already exists")
+            elif existing_user.phone == phone:
+                return jsonify(success=False, message="Phone number already exists")
         
         # Create new user
-        new_user = User(username=username, email=email)
+        new_user = User(
+            username=username, 
+            email=email,
+            phone=phone  # Add this 'phone' field to the User model and database table.
+        )
         new_user.set_password(password)
         
         try:
