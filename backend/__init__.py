@@ -24,17 +24,8 @@ def create_app():
     
     # Initialize the Database
     db.init_app(app)
-
-
-    # Initialize Flask-Migrate
-    migrate = Migrate(app, db)
-
-    # Removed db.create_all() as Flask-Migrate will handle schema updates
-    # with app.app_context():
-    #     db.create_all()  # Flask-Migrate will take care of this
-
-    from .routes import register_routes
-    register_routes(app)
+    migrate = Migrate(app, db)  # Initialize Migrate
+    
     
     return app
 
