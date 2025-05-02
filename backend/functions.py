@@ -85,10 +85,7 @@ def login_required(f):
 
 def init_dashboard():
     if request.method == 'GET':
-        user = User.query.get(session['user_id'])
-        if not user.avatar_path:
-            user.avatar_path = 'asset/avatar.png'
-        return render_template('dashboard.html', user = user)
+        return render_template('dashboard.html')
     return render_template('login.html')
 
 
@@ -103,10 +100,6 @@ def init_profile():
     # Get the current user from the session
     user = User.query.get(session['user_id'])
     
-    # Default avatar path if not set
-    if not user.avatar_path:
-        user.avatar_path = 'asset/avatar.png'
-
     # Handle profile update when the form is submitted (POST method)
     if request.method == 'POST':
         current_password = request.form.get('current_password')
@@ -199,7 +192,7 @@ def init_profile():
             return redirect(url_for('profile'))
 
     # If GET request, just render the profile page with the user's current data
-    return render_template('profile.html', user=user)
+    return render_template('profile.html')
 
 
 def init_sharing():

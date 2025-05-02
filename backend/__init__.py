@@ -2,6 +2,8 @@ from flask import Flask
 from flask_migrate import Migrate
 from .models import db
 from .config import Config
+from flask import session
+from backend.models import User
 import os
 
 def create_app():
@@ -31,6 +33,16 @@ def create_app():
                 db.create_all()
             else:
                 print("✅ Database already exists:", db_path)
+
+    # 📌 Inject `user` into all templates
+    @app.context_processor
+    def inject_user():
+        user = None
+        if 'user_id' in session:
+            user = User.query.get(session['user_id'])
+            if not user.avatar_path:
+                user.avatar_path = 'asset/avatar.png'
+        return dict(user=user)
 
     from .routes import register_routes
     register_routes(app)
