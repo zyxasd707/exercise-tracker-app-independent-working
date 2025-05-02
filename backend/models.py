@@ -19,8 +19,8 @@ class User(db.Model):
     
     # Email field - must be unique and is required
     email = db.Column(db.String(120), unique=True, nullable=False)
-    
 
+    avatar_path = db.Column(db.String(255), nullable=True)
     full_name = db.Column(db.String(120), nullable=True)
     dob = db.Column(db.Date, nullable=True)
     gender = db.Column(db.String(10), nullable=True)

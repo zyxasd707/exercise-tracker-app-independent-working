@@ -1,0 +1,38 @@
+.profile .joined-date {
+    font-size: 14px;
+    color: #9c9c9c;
+}
+
+.profile .common-container {
+    min-width: 200px;
+}
+
+.profile .avatar-wrapper .fa-pen-to-square {
+    right: 0;
+}
+
+.container .profile-container {
+    padding-top: 10px;
+}
+
+#profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    /*cursor: pointer;*/
+    object-fit: cover;
+    pointer-events: none;
+}
+
+#profile-img.edit-mode {
+    cursor: pointer;
+    pointer-events: all;
+}
+
+#profile-img.edit-mode:hover {
+    opacity: 0.5;
+}
+
+#file-input {
+    display: none;
+}
