@@ -1,40 +1,38 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate  # Import Migrate
+from flask_migrate import Migrate
 from .models import db
+from .config import Config
 import os
 
 def create_app():
     app = Flask(
         __name__,
-        template_folder='../frontend',  # Path to the frontend static files
-        static_folder='../frontend',    # Path to the frontend templates
+        template_folder='../frontend',
+        static_folder='../frontend',
     )
-    
-    # Setting Database
-    app.config['SECRET_KEY'] = 'your-secret-key-here'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///exercise_tracker.db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    
-    # Ensure the instance file exists
+
+    app.config.from_object(Config)
+
     try:
         os.makedirs(app.instance_path)
     except OSError:
         pass
-    
-    # Initialize the Database
+
     db.init_app(app)
-
-
-    # Initialize Flask-Migrate
     migrate = Migrate(app, db)
 
-    # Removed db.create_all() as Flask-Migrate will handle schema updates
-    # with app.app_context():
-    #     db.create_all()  # Flask-Migrate will take care of this
+    # ✅ Auto-create DB if it doesn't exist
+    with app.app_context():
+        db_uri = app.config['SQLALCHEMY_DATABASE_URI']
+        if db_uri.startswith('sqlite:///'):
+            db_path = db_uri.replace('sqlite:///', '')
+            if not os.path.exists(db_path):
+                print("🆕 Creating new database:", db_path)
+                db.create_all()
+            else:
+                print("✅ Database already exists:", db_path)
 
     from .routes import register_routes
     register_routes(app)
-    
-    return app
 
+    return app
