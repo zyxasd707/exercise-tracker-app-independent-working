@@ -1,8 +1,10 @@
-from flask import request, jsonify, render_template, session, redirect, url_for, flash
+from flask import request, jsonify, render_template, session, redirect, url_for, flash, current_app
 from .models import db, User, ExerciseLog, Achievement
 from functools import wraps
 from datetime import datetime
+from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash
+import os
 
 
 def handle_login():
@@ -83,7 +85,10 @@ def login_required(f):
 
 def init_dashboard():
     if request.method == 'GET':
-        return render_template('dashboard.html')
+        user = User.query.get(session['user_id'])
+        if not user.avatar_path:
+            user.avatar_path = 'asset/avatar.png'
+        return render_template('dashboard.html', user = user)
     return render_template('login.html')
 
 
@@ -97,6 +102,10 @@ def init_profile():
 
     # Get the current user from the session
     user = User.query.get(session['user_id'])
+    
+    # Default avatar path if not set
+    if not user.avatar_path:
+        user.avatar_path = 'asset/avatar.png'
 
     # Handle profile update when the form is submitted (POST method)
     if request.method == 'POST':
@@ -121,6 +130,7 @@ def init_profile():
         print(f"New Gender: {request.form.get('gender')}")
         print(f"New Height: {request.form.get('height_cm')}")
         print(f"New Weight: {request.form.get('weight_kg')}")
+        print(f"New Avatar: {request.files.get('profile_image')}")
 
         # Process form data and update user fields if new data is provided
         new_username = request.form.get('username')
@@ -130,6 +140,25 @@ def init_profile():
         new_gender = request.form.get('gender')
         new_height_cm = request.form.get('height_cm')
         new_weight_kg = request.form.get('weight_kg')
+        new_profile_image = request.files.get('profile_image')
+
+        # Profile image
+        if new_profile_image and new_profile_image.filename != '':
+            upload_folder = os.path.join(current_app.static_folder, 'uploads')
+            os.makedirs(upload_folder, exist_ok=True)  # Tạo thư mục nếu chưa có
+
+            # Delete current avatar if it exists
+            if user.avatar_path and user.avatar_path != 'asset/avatar.png':
+                old_path = os.path.join(current_app.static_folder, user.avatar_path)
+                if os.path.exists(old_path):
+                    os.remove(old_path)
+    
+            # Save the new profile image
+            filename = secure_filename(new_profile_image.filename)
+            new_path = os.path.join(upload_folder, filename)
+            new_profile_image.save(new_path)
+            user.avatar_path = f'uploads/{filename}'
+
 
         if new_username:
             user.username = new_username

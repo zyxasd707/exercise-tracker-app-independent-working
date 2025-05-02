@@ -37,6 +37,15 @@ body {
     grid-template-columns: 220px 1fr;
 }
 
+.common-container {
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    padding: var(--third-padding);
+    border-radius: var(--first-radius);
+    background-color: var(--white-color);
+}
+
 /* Menu side bar */
 .sidebar {
     height: 100%;
