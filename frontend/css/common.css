@@ -146,6 +146,7 @@ body {
 .header .profile img {
     max-width: 100%;
     width: 35px;
+    height: 35px;
 }
 
 /* Main content */

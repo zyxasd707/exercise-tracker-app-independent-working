@@ -2,16 +2,28 @@ body.landing-page {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--background-color);
+    background-image: url(../asset/landing-bg.webp);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+body.landing-page::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.68);
+    z-index: -1;
 }
 
 .welcome-container {
     max-width: 700px;
     width: 95%;
-    padding: 40px 20px;
+    padding: 40px;
     background: var(--white-color);
     border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    box-shadow: 30px 50px 50px black;
 }
 
 .logo {
