@@ -41,3 +41,11 @@
 #file-input {
     display: none;
 }
+
+.profile .col-md-6-left {
+    padding-right: 30px;
+}
+
+.profile .col-md-6-right {
+    padding-left: 30px;
+}

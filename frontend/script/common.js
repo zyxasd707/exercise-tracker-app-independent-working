@@ -59,3 +59,10 @@ getSidebarLink.forEach((item) => {
         item.classList.add("active");
     }
 });
+
+/*************************************************************
+ * Handle logout                                             *
+ *************************************************************/
+function handleLogout() {
+    sessionStorage.removeItem('chatHistory');
+}
