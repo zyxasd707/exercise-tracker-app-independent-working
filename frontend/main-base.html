@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Exercise Tracker{% endblock %}</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='asset/favicon.ico') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=Jost:ital,wght@0,100..900;1,100..900&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -12,11 +14,14 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
     {% block extra_head %}{% endblock %}
 </head>
 <body>
 <div class="page-content index-page">
-    <div class="sidebar">
+    <div></div>
+    <div class="sidebar position-fixed">
         <div class="brand">
             <i class="fa-solid fa-xmark xmark"></i>
             <a class="brand-name cursor-pointer" href="{{ url_for('dashboard') }}">
@@ -27,31 +32,25 @@
             <li>
                 <a id="/dashboard" href="{{ url_for('dashboard') }}" class="sidebar-link">
                     <i class="fa-solid fa-square-poll-horizontal"></i>
-                    <span>Dashboard</span>
+                    <span>DASHBOARD</span>
                 </a>
             </li>
             <li>
                 <a id="/profile" href="{{ url_for('profile') }}" class="sidebar-link">
                     <i class="fa-solid fa-user"></i>
-                    <span>Profile</span>
+                    <span>PROFILE</span>
                 </a>
             </li>
             <li>
                 <a id="/sharing" href="{{ url_for('sharing') }}" class="sidebar-link">
                     <i class="fa-solid fa-share-from-square"></i>
-                    <span>Sharing</span>
+                    <span>SHARING</span>
                 </a>
             </li>
             <li>
                 <a id="/exercise_log" href="{{ url_for('exercise_log') }}" class="sidebar-link">
                     <i class="fa-solid fa-dumbbell"></i>
-                    <span>Exercise Log</span>
-                </a>
-            </li>
-            <li>
-                <a id="/achievement" href="{{ url_for('achievement') }}" class="sidebar-link">
-                    <i class="fa-solid fa-trophy"></i>
-                    <span>Achievement</span>
+                    <span>EXERCISE LOG</span>
                 </a>
             </li>
             <li>
@@ -62,7 +61,7 @@
                     data-bs-target="#confirmLogoutModal"
                 >
                     <i class="fa-solid fa-right-from-bracket"></i>
-                    <span>Logout</span>
+                    <span>LOGOUT</span>
                 </a>
             </li>
         </ul>

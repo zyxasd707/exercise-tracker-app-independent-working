@@ -196,3 +196,108 @@ const bubbleChart = new Chart(timeChart, {
         }
     }
 });
+
+/*************************************************
+ * Handle chart with GPT                         *
+ *************************************************/
+/* global MathJax */
+// Detect the time of day and set a greeting
+function detectTimeOfDay() {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) {
+        return "morning";
+    } else if (hour >= 12 && hour < 18) {
+        return "afternoon";
+    } else {
+        return "evening";
+    }
+}
+
+// Greetings based on the time of day
+const greetingsByTime = {
+    morning: "Good morning! Ready to kickstart your day with a healthy plan?",
+    afternoon: "Good afternoon! Need a quick workout idea or meal tip?",
+    evening: "Good evening! Want to reflect on today’s progress or plan for tomorrow?"
+};
+
+// Additional random greetings
+const greetings = [
+    "Hi there! Are you working on weight loss, muscle gain, or just living healthier?",
+    "Hey! I’m your virtual workout buddy 💪 Ask me anything about training or healthy eating.",
+    "Welcome! Tell me your fitness or nutrition goal, and I’ll help you get started with a solid plan."
+];
+const timeOfDay = detectTimeOfDay();
+greetings.push(greetingsByTime[timeOfDay]);
+const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+const greetingMessage = randomGreeting;
+
+// Prompt to tell the model to act as a personal trainer
+let messageHistory = [
+    {
+        role: "system",
+        content:
+            "You are a professional personal trainer and nutritionist. Only answer health, fitness, or nutrition-related questions. If asked about anything else, politely say you're only able to assist with fitness or nutrition topics."
+    }
+];
+messageHistory.push({ role: "assistant", content: greetingMessage });
+
+// Load the conversation history in sessionStorage
+if (sessionStorage.getItem("chatHistory")) {
+    messageHistory = JSON.parse(sessionStorage.getItem("chatHistory"));
+}
+renderChatFromHistory(messageHistory);
+
+// Send a message
+$('#send-btn').on('click', function () {
+    const $input = $('#user-input');
+    const message = $input.val().toString().trim();
+    if (!message) return;
+
+    const $chat = $('#chat-window');
+    $chat.append(`<div class="chat-message user">${message}</div>`);
+    $chat.scrollTop($chat[0].scrollHeight);
+    $input.val('');
+
+    messageHistory.push({ role: 'user', content: message });
+    sessionStorage.setItem('chatHistory', JSON.stringify(messageHistory));
+
+    // Calling a proxy server deployed on Render
+    $.ajax({
+        url: 'https://exercise-assistant.onrender.com/chat',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: messageHistory
+        }),
+        success: function (response) {
+            const reply = response.choices[0].message.content;
+            $chat.append(`<div class="chat-message gpt">${reply}</div>`);
+            MathJax.typeset(); // Activate MathJax for rendering LaTeX
+            $chat.scrollTop($chat[0].scrollHeight);
+
+            messageHistory.push({ role: 'assistant', content: reply });
+            sessionStorage.setItem('chatHistory', JSON.stringify(messageHistory));
+        },
+        error: function (xhr) {
+            console.error(xhr.responseText);
+            $chat.append(`<div class="chat-message gpt text-danger">Error occurred.</div>`);
+        }
+    });
+});
+
+// User can press Enter to send
+$('#user-input').on('keypress', function (e) {
+    if (e.which === 13) $('#send-btn').click();
+});
+
+// Render chat history from sessionStorage
+function renderChatFromHistory(history) {
+    const $chat = $('#chat-window');
+    history.forEach(msg => {
+        if (msg.role === "system") return;
+        const cssClass = msg.role === 'user' ? 'user' : 'gpt';
+        $chat.append(`<div class="chat-message ${cssClass}">${msg.content}</div>`);
+    });
+    $chat.scrollTop($chat[0].scrollHeight);
+}

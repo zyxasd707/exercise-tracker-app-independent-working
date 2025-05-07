@@ -31,4 +31,8 @@
     --main-radius: 50px;
     --first-radius: 10px;
     --secondary-radius: 6px;
+
+    /* Font family */
+    --default-font: "Jost";
+    --big-heading-font: "Forum";
 }
