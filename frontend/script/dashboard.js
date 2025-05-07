@@ -261,13 +261,11 @@ $('#send-btn').on('click', function () {
     messageHistory.push({ role: 'user', content: message });
     sessionStorage.setItem('chatHistory', JSON.stringify(messageHistory));
 
+    // Calling a proxy server deployed on Render
     $.ajax({
-        url: 'https://api.openai.com/v1/chat/completions',
+        url: 'https://exercise-assistant.onrender.com/chat',
         method: 'POST',
-        headers: {
-            'Authorization': 'Bearer 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',
-            'Content-Type': 'application/json'
-        },
+        contentType: 'application/json',
         data: JSON.stringify({
             model: 'gpt-4o-mini',
             messages: messageHistory
