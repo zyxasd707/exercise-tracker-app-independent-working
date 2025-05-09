@@ -12,15 +12,6 @@ $(function () {
         const $spinner = $('#register-spinner');
         const $buttonText = $('#register-text');
         
-        // Password confirmation check
-        const password = $('#password').val();
-        const confirmPassword = $('#confirm-password').val();
-        
-        if (password !== confirmPassword) {
-            $error.text('Passwords do not match!').removeClass('d-none');
-            return;
-        }
-        
         $error.addClass('d-none');
         $success.addClass('d-none');
         $button.prop('disabled', true);
@@ -29,7 +20,10 @@ $(function () {
         
         fetch('/register', {
             method: 'POST',
-            body: formData
+            body: formData,
+            headers: {
+                'X-CSRFToken': $('input[name="csrf_token"]').val()
+            }
         })
             .then(response => response.json())
             .then(data => {

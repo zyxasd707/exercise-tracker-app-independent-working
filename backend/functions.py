@@ -5,72 +5,70 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash
 import os
-
+from .forms import LoginForm, RegistrationForm
 
 def handle_login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        
-        user = User.query.filter_by(username=username).first()
-        if user and user.check_password(password):
-            session['user_id'] = user.id
-            return jsonify(success=True)
-        
-        # For backward compatibility, check admin hardcoded credentials
-        admin = is_admin(username, password)
-        if admin:
-            return jsonify(success=True, is_admin=True)
-            
-        return jsonify(success=False)
+    form = LoginForm()
     
-    return render_template('login.html')
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            username = form.username.data
+            password = form.password.data
+            
+            user = User.query.filter_by(username=username).first()
+            if user and user.check_password(password):
+                session['user_id'] = user.id
+                return jsonify(success=True)
+            
+            # Check administrator credentials.
+            admin = is_admin(username, password)
+            if admin:
+                return jsonify(success=True, is_admin=True)
+                
+            return jsonify(success=False, message="Invalid username or password")
+        return jsonify(success=False, message="Form validation failed")
+    
+    return render_template('login.html', form=form)
 
 
-def handle_register():
-    if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
-        phone = request.form.get('phone')  # Add this 'phone' field to the User model and database table.
-        
-        # Check if username, email or phone already exists
-        existing_user = User.query.filter(
-            (User.username == username) | 
-            (User.email == email) |
-            (User.phone == phone)  # Add this test to check if the phone number already exists.  
-        ).first()
-            
-        if existing_user:
-            if existing_user.username == username:
-                return jsonify(success=False, message="Username already exists")
-            elif existing_user.email == email:
-                return jsonify(success=False, message="Email already exists")
-            elif existing_user.phone == phone:
-                return jsonify(success=False, message="Phone number already exists")
-        
-        # Create new user
-        new_user = User(
-            username=username, 
-            email=email,
-            phone=phone  # Add this 'phone' field to the User model and database table.
-        )
-        new_user.set_password(password)
-        
-        try:
-            db.session.add(new_user)
-            db.session.commit()
-            return jsonify(success=True)
-        except Exception as e:
-            db.session.rollback()
-            return jsonify(success=False, message="Registration failed: " + str(e))
+def handle_register(): #
+    form = RegistrationForm()
     
-    return render_template('register.html')
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            username = form.username.data
+            email = form.email.data
+            password = form.password.data
+            phone = form.phone.data
+            
+            # Create new user
+            new_user = User(
+                username=username, 
+                email=email,
+                phone=phone
+            )
+            new_user.set_password(password)
+            
+            try:
+                db.session.add(new_user)
+                db.session.commit()
+                return jsonify(success=True)
+            except Exception as e:
+                db.session.rollback()
+                return jsonify(success=False, message="Registration failed: " + str(e))
+        else:
+            # Returns form validation errors.
+            errors = {field.name: field.errors for field in form if field.errors}
+            return jsonify(success=False, message="Validation failed", errors=errors)
+    
+    return render_template('register.html', form=form)
 
 
 # This function checks if the user is an admin.
 def is_admin(username, password):
-    return username == "admin" and password == "admin"
+    admin_username = os.environ.get('ADMIN_USERNAME', 'admin') # Default to 'admin' if not set in environment variables
+    admin_password = os.environ.get('ADMIN_PASSWORD', 'admin') 
+    return username == admin_username and password == admin_password
 
 
 # Authentication decorator

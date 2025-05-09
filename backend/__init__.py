@@ -5,6 +5,11 @@ from .config import Config
 from flask import session
 from backend.models import User
 import os
+from flask_wtf.csrf import CSRFProtect
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 def create_app():
     app = Flask(
@@ -14,6 +19,9 @@ def create_app():
     )
 
     app.config.from_object(Config)
+    
+    # Initialise CSRF protection.
+    csrf = CSRFProtect(app) #  # "This 'entry point' enforces CSRF protection by generating and validating CSRF tokens for all requests."
 
     try:
         os.makedirs(app.instance_path)
