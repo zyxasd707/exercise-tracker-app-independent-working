@@ -25,7 +25,10 @@ $(function () {
 
         fetch('/login', {
             method: 'POST',
-            body: formData
+            body: formData,
+            headers: {
+                'X-CSRFToken': $('input[name="csrf_token"]').val()
+            }
         })
             .then(response => response.json())
             .then(data => {
