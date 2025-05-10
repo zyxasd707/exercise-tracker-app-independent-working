@@ -33,6 +33,18 @@ class User(db.Model):
     
     # Timestamp when the user account was created
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Timestamp for the last time the user logged in
+    last_login = db.Column(db.DateTime, nullable=True)
+    is_active = db.Column(db.Boolean, default=True)
+    
+    # Method to update the last login timestamp
+    def update_last_login(self):
+        """
+        Update the last login timestamp to the current time.
+        """
+        self.last_login = datetime.utcnow()
+        db.session.commit()
 
     def set_password(self, password):
         """

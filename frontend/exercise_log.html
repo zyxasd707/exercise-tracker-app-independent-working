@@ -12,6 +12,9 @@
             <!-- Left Column: Exercise Form -->
             <div class="col-md-3">
                 <form method="POST" action="/exercise_log">
+                    <!-- Add CSRF token -->
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    
                     <div class="form-group mb-3">
                         <label for="exercise_type">Exercise Type</label>
                         <select class="form-control" id="exercise_type" name="exercise_type" required>

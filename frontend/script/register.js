@@ -1,5 +1,5 @@
 /*************************************************************
- * Handle register form                                      *
+ * This File is used to Handle register form                                      *
  *************************************************************/
 $(function () {
     $('#register-form').on('submit', function (e) {
@@ -38,7 +38,15 @@ $(function () {
                     }, 2000);
                 } else {
                     // If registration fails, show the error message
-                    $error.text(data.message || 'Registration failed!').removeClass('d-none');
+                    if (data.errors && data.errors.username && data.errors.username.includes('Username already exists')) {
+                        $error.text('User has already existed, please choose another username.').removeClass('d-none');
+                    } else if (data.errors && data.errors.email && data.errors.email.includes('Email already exists')) {
+                        $error.text('Email has already been registered. Please use another email.').removeClass('d-none');
+                    } else if (data.errors && data.errors.phone && data.errors.phone.includes('Phone number already exists')) {
+                        $error.text('Phone number has already been registered. Please use another phone number.').removeClass('d-none');
+                    } else {
+                        $error.text(data.message || 'Registration failed!').removeClass('d-none');
+                    }
                     $button.prop('disabled', false);
                     $spinner.addClass('d-none');
                     $buttonText.removeClass('d-none');

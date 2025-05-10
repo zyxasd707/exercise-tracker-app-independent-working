@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash
 import os
 from .forms import LoginForm, RegistrationForm
 
-def handle_login():
+def handle_login(): # Handles user login
     form = LoginForm()
     
     if request.method == 'POST':
@@ -15,23 +15,41 @@ def handle_login():
             username = form.username.data
             password = form.password.data
             
-            user = User.query.filter_by(username=username).first()
-            if user and user.check_password(password):
-                session['user_id'] = user.id
-                return jsonify(success=True)
+            # Check if the user is an admin
+            if is_admin(username, password):
+                session['admin'] = True
+                return jsonify(success=True, redirect='/admin')
             
-            # Check administrator credentials.
-            admin = is_admin(username, password)
-            if admin:
-                return jsonify(success=True, is_admin=True)
+            # Check if the user is a normal user
+            user = User.query.filter((User.username == username) | (User.email == username)).first()
+            
+            if user and user.check_password(password):
+                if not user.is_active:
+                    return jsonify(success=False, message="Account is disabled. Please contact support.")
                 
-            return jsonify(success=False, message="Invalid username or password")
-        return jsonify(success=False, message="Form validation failed")
+                # Update the last login timestamp
+                user.last_login = datetime.utcnow()
+                
+                try:
+                    db.session.commit()
+                    
+                    # Set the session
+                    session['user_id'] = user.id
+                    
+                    return jsonify(success=True, redirect='/dashboard')
+                except Exception as e:
+                    db.session.rollback()
+                    return jsonify(success=False, message="Login failed: " + str(e))
+            else:
+                return jsonify(success=False, message="Invalid username or password")
+        else:
+            errors = {field.name: field.errors for field in form if field.errors}
+            return jsonify(success=False, message="Validation failed", errors=errors)
     
     return render_template('login.html', form=form)
 
 
-def handle_register(): #
+def handle_register(): # Handles user registration
     form = RegistrationForm()
     
     if request.method == 'POST':
@@ -57,8 +75,15 @@ def handle_register(): #
                 db.session.rollback()
                 return jsonify(success=False, message="Registration failed: " + str(e))
         else:
-            # Returns form validation errors.
-            errors = {field.name: field.errors for field in form if field.errors}
+            # Handle form validation errors.
+            errors = {}
+            for field_name, field_errors in form.errors.items():
+                errors[field_name] = field_errors
+            
+            # 
+            if 'username' in errors and any('already exists' in err.lower() for err in errors['username']):
+                return jsonify(success=False, message="User has already existed, please choose another username.", errors=errors)
+            
             return jsonify(success=False, message="Validation failed", errors=errors)
     
     return render_template('register.html', form=form)
@@ -254,9 +279,14 @@ def init_sharing():
 
 
 def handle_exercise_log():
+    # Ensure the user is logged in
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+        
     user_id = session['user_id']
 
     if request.method == 'POST':
+        # Validate CSRF token (Flask-WTF handles this automatically)
         exercise_type = request.form['exercise_type']
         duration = int(request.form['duration'])
         calories = int(request.form['calories'])
