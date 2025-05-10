@@ -20,8 +20,8 @@ def create_app():
 
     app.config.from_object(Config)
     
-    # Initialise CSRF protection.
-    csrf = CSRFProtect(app) #  # "This 'entry point' enforces CSRF protection by generating and validating CSRF tokens for all requests."
+    # Initialize CSRF protection
+    csrf = CSRFProtect(app)  # "This 'entry point' enforces CSRF protection by generating and validating CSRF tokens for all requests."
 
     try:
         os.makedirs(app.instance_path)
