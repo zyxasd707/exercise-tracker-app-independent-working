@@ -21,6 +21,9 @@
 
     <div class="container mw-100 mt-4">
         <form method="POST" id="updateForm" enctype="multipart/form-data">
+            <!-- Add CSRF Token -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
             <div class="row">
                 <div class="col-md-3 common-container justify-content-center align-items-center">
                     <div class="avatar-wrapper position-relative">
@@ -112,7 +115,7 @@
                     <div class="form-group row mb-2 d-flex align-items-center">
                         <label class="col-sm-3 col-form-label"><strong>Last Login:</strong></label>
                         <div class="col-sm-9">
-                            <span class="view-mode">{{ user.last_login.strftime('%d-%m-%Y %H:%M') if user.last_login else 'Never' }}</span>
+                            <span>{{ user.last_login.strftime('%d-%m-%Y %H:%M') if user.last_login else 'Never' }}</span>
                         </div>
                     </div>
 
@@ -120,7 +123,7 @@
                     <div class="form-group row mb-2 d-flex align-items-center">
                         <label class="col-sm-3 col-form-label"><strong>Account Status:</strong></label>
                         <div class="col-sm-9">
-                            <span class="view-mode">
+                            <span>
                                 {% if user.is_active %}
                                     <span class="badge bg-success">Active</span>
                                 {% else %}
