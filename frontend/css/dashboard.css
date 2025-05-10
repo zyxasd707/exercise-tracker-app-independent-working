@@ -13,15 +13,22 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.card.gold {
+.card.all {
     background: linear-gradient(to right, #ffe082, #fff3cd);
 }
-
-.card.blue {
+.card.swimming {
     background: linear-gradient(to right, #bbdefb, #e3f2fd);
 }
-
-.card.gray {
+.card.running {
+    background: linear-gradient(to right, #ffab91, #ffe0b2);
+}
+.card.cycling {
+    background: linear-gradient(to right, #a5d6a7, #e8f5e9);
+}
+.card.yoga {
+    background: linear-gradient(to right, #e1bee7, #f8bbd0);
+}
+.card.others {
     background: #f1f3f4;
 }
 

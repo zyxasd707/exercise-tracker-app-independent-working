@@ -12,66 +12,53 @@
                 <div class="box-section1">
                     <div class="box-title">
                         <h4>Welcome</h4>
-                        <p>Group 55</p>
+                        <p>{{ user.username }}</p>
                     </div>
                     <div class="box-image">
                         <img src="{{ url_for('static', filename='asset/welcome.png') }}" alt="No image" />
                     </div>
-                    <img src="{{ url_for('static', filename='asset/avatar.png') }}" alt="No image" class="avatar" />
+                    <img src="{{ url_for('static', filename=user.avatar_path) }}" alt="No image" class="avatar" />
                 </div>
                 <div class="box-section2">
                     <ul>
                         <li>
-                            <span>Group-55 CITS5505</span>
-                            <p>Agile Developers</p>
+                            {% set name = user.full_name %}
+                            <span>
+                              {{ name if name not in [None, 'None', ''] else 'Unnamed' }}
+                              {% if name in [None, 'None', ''] %}
+                                <span class="text-danger">(Update)</span>
+                              {% endif %}
+                            </span>
+                            <p>{{ user.email }}</p>
                         </li>
                         <li>
                             <span>{{total_exercises}}</span>
-                            <p>total number of Exercises</p>
+                            <p>exercises</p>
                         </li>
                         <li>
                             <span>{{last_calories}}</span>
-                            <p>Calories burned last exercise</p>
+                            <p>calories last ex.</p>
                         </li>
                     </ul>
                 </div>
-                <a href="./pages/Profile.html">Profile </a>
+                <div class="box-section3">
+                    <a href="{{ url_for('profile') }}">Profile </a>
+                </div>
             </div>
         </div>
         <div class="col-12 col-md-6 mb-4 custom-cell">
             <div class="box overflow-y-auto">
-                <!-- TODO -->
                 <h4>Achievements <span class="trophy">🏆</span></h4>
                 <div class="achievement-section">
-                    <div class="card gold">
-                        <div class="icon">⭐</div>
+                    {% for achievement in achievements %}
+                    <div class="card {{ achievement.exercise_type|lower }}">
+                        <div class="icon">{{ achievement.icon }}</div>
                         <div class="content">
-                            <div><strong>Accumulate 1500 total minutes of all exercise types</strong></div>
-                            <div class="date">(2025-05-06 17:54)</div>
+                            <div><strong>{{ achievement.description }}</strong></div>
+                            <div class="date">({{ achievement.achieved_at.strftime('%Y-%m-%d %H:%M') }})</div>
                         </div>
                     </div>
-                    <div class="card blue">
-                        <div class="icon">🚴‍♂️</div>
-                        <div class="content">
-                            <div><strong>Accumulate 500 minutes of cycling</strong></div>
-                            <div class="date">(2025-05-05 17:54)</div>
-                        </div>
-                    </div>
-                    <div class="card gray">
-                        <div class="icon">🏃‍♂️</div>
-                        <div class="content">
-                            <div><strong>Accumulate 1000 minutes of running</strong></div>
-                            <div class="date">(2025-05-02 16:01)</div>
-                        </div>
-                    </div>
-
-                    <div class="card gray">
-                        <div class="icon">🏃‍♂️</div>
-                        <div class="content">
-                            <div><strong>Accumulate 500 minutes of running</strong></div>
-                            <div class="date">(2025-05-01 16:01)</div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

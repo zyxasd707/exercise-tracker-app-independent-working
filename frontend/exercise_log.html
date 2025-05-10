@@ -6,11 +6,10 @@
 
 {% block content %}
 <div class="main-content-boxes profile">
-    <h4>YOUR EXERCISE LOGS</h4>
     <div class="container mw-100 mt-4">
-        <div class="row">
+        <div class="row justify-content-between">
             <!-- Left Column: Exercise Form -->
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <form method="POST" action="/exercise_log">
                     <!-- Add CSRF token -->
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -41,7 +40,7 @@
             </div>
 
             <!-- Right Column: Exercise Logs -->
-            <div class="col-md-9">
+            <div class="col-md-7">
                 <table class="table table-striped">
                     <tr>
                         <th>Exercise Type</th>

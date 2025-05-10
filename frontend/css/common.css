@@ -51,7 +51,6 @@ body {
     font-family: var(--default-font), serif;
     height: 100%;
     background-color: var(--white-color);
-    padding: var(--third-padding);
     display: flex;
     flex-direction: column;
     box-shadow: 0 0 10px 0 #ddd;
@@ -61,6 +60,16 @@ body {
     -moz-transition: transform 0.45s;
     -ms-transition: transform 0.45s;
     -o-transition: transform 0.45s;
+}
+.sidebar .sidebar-fade {
+  flex-grow: 1;
+  background-image:
+    linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0) 20%),
+    linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url('../asset/sidebar.png');
+  background-size: cover;
+  background-position: bottom;
+  background-repeat: no-repeat;
 }
 .sidebar.position-fixed {
     width: 220px;
@@ -136,13 +145,14 @@ body {
     justify-content: space-between;
     align-items: center;
     background-color: var(--white-color);
-    padding: var(--third-padding);
+    padding: 8px 35px;
 }
 .header .bar-item {
     cursor: pointer;
     font-size: 1.2rem;
 }
 .header .profile {
+    padding: 0;
     display: flex;
     align-items: center;
     gap: var(--fourth-padding);
@@ -262,11 +272,11 @@ main .main-content h4 {
     cursor: pointer;
 }
 .main-content-boxes .box a {
-    font-size: 0.8rem;
+    height: 38px;
+    margin-top: 0;
+    align-self: center;
     text-decoration: none;
-    align-self: flex-end;
     margin-right: var(--fourth-margin);
-    margin-bottom: var(--fourth-margin);
 }
 .main-content-boxes .box .box-section2 {
     border-top: 1px solid var(--eee-color);
@@ -294,4 +304,10 @@ main .main-content h4 {
     margin: 0;
     color: #888;
     font-size: 0.9rem;
+}
+.main-content-boxes .box .box-section3 {
+    padding: 15px;
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
 }
