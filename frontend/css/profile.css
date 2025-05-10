@@ -1,3 +1,7 @@
+.profile {
+    padding: 0 30px;
+}
+
 .profile .joined-date {
     font-size: 14px;
     color: #9c9c9c;
@@ -48,4 +52,28 @@
 
 .profile .col-md-6-right {
     padding-left: 30px;
+}
+
+.profile .table-bmi td {
+    background-color: unset;
+}
+
+#bmi-result-container {
+    border: unset;
+}
+
+.bmi-underweight {
+  background: linear-gradient(to right, #ffe082, #ffffff);
+}
+
+.bmi-healthy {
+  background: linear-gradient(to right, #81c784, #ffffff);
+}
+
+.bmi-overweight {
+  background: linear-gradient(to right, #ffab91, #ffffff);
+}
+
+.bmi-obese {
+  background: linear-gradient(to right, #ef5350, #ffffff);
 }

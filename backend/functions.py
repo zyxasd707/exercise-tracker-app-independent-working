@@ -111,10 +111,33 @@ def init_dashboard():
         user_id = session['user_id']
 
         total_exercises = ExerciseLog.query.filter_by(user_id=user_id).count()
-
         latest_exercise = ExerciseLog.query.filter_by(user_id=user_id).order_by(ExerciseLog.date.desc()).first()
         last_calories = latest_exercise.calories if latest_exercise else 0
-        return render_template('dashboard.html', total_exercises=total_exercises, last_calories=last_calories)
+        achievements = Achievement.query.filter_by(user_id=user_id) \
+            .order_by(Achievement.achieved_at.desc()).all()
+
+        # Add icon for each exercise type
+        for achievement in achievements:
+            match achievement.exercise_type.lower():
+                case 'all':
+                    achievement.icon = '⭐'
+                case 'running':
+                    achievement.icon = '🏃'
+                case 'cycling':
+                    achievement.icon = '🚴'
+                case 'swimming':
+                    achievement.icon = '🏊'
+                case 'yoga':
+                    achievement.icon = '🧘'
+                case _:
+                    achievement.icon = '🧩'
+
+        return render_template(
+            'dashboard.html',
+            total_exercises=total_exercises,
+            last_calories=last_calories,
+            achievements=achievements
+        )
     return render_template('login.html')
 
 def connect_db_to_charts():

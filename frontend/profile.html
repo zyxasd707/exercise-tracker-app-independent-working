@@ -6,8 +6,6 @@
 
 {% block content %}
 <div class="main-content-boxes profile">
-    <h4 class="fw-bold mb-4">YOUR PROFILE</h4>
-
     <!-- Display Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -159,7 +157,7 @@
             <!-- Left column: BMI Chart -->
             <div class="col-md-6 mb-4 col-md-6-left">
                 <h4 class="fw-bold mb-4">BMI CALCULATOR CHART</h4>
-                <table class="table table-bordered">
+                <table class="table table-bordered table-bmi">
                     <thead class="table-light">
                     <tr>
                         <th>BMI</th>
@@ -167,54 +165,44 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr><td>Below 18.5</td><td>Underweight</td></tr>
-                    <tr><td>18.5 - 24.9</td><td>Healthy</td></tr>
-                    <tr><td>25.0 - 29.9</td><td>Overweight</td></tr>
-                    <tr><td>30.0 and Above</td><td>Obese</td></tr>
+                        <tr class="bmi-underweight">
+                            <td>Below 18.5</td>
+                            <td>Underweight</td>
+                        </tr>
+                        <tr class="bmi-healthy">
+                            <td>18.5 - 24.9</td>
+                            <td>Healthy</td>
+                        </tr>
+                        <tr class="bmi-overweight">
+                            <td>25.0 - 29.9</td>
+                            <td>Overweight</td>
+                        </tr>
+                        <tr class="bmi-obese">
+                            <td>30.0 and Above</td>
+                            <td>Obese</td>
+                        </tr>
                     </tbody>
                 </table>
-                <small class="text-muted"><strong>BMR</strong>: Basal Metabolic Rate / <strong>BMI</strong>: Body Mass Index</small>
             </div>
 
             <!-- Right column: BMI Form -->
             <div class="col-md-6 col-md-6-right">
                 <h4 class="fw-bold mb-3">CALCULATE YOUR BMI</h4>
-                <p>Your BMR calculator generates the number of calories your body burns per day at rest.<br> Your BMR with activity factor is the number of calories your body burns per day based on the activity factor you selected.</p>
-
-                <form>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <input type="number" class="form-control" placeholder="Height / cm">
-                        </div>
-                        <div class="col">
-                            <input type="number" class="form-control" placeholder="Weight / kg">
-                        </div>
+                <div id="bmi-result-container" class="alert d-none">Your BMI: <span id="bmi-result"></span></div>
+                <div class="row mb-3">
+                    <div class="col input-group">
+                      <input id="heightInput" type="number" class="form-control" placeholder="Height">
+                      <span class="input-group-text">cm</span>
                     </div>
-
-                    <div class="row mb-3">
-                        <div class="col">
-                            <input type="number" class="form-control" placeholder="Age">
-                        </div>
-                        <div class="col">
-                            <select class="form-select">
-                                <option>Male</option>
-                                <option>Female</option>
-                                <option>Other</option>
-                            </select>
-                        </div>
+                    <div class="col input-group">
+                      <input id="weightInput" type="number" class="form-control" placeholder="Weight">
+                      <span class="input-group-text">kg</span>
                     </div>
-
-                    <div class="mb-3">
-                        <select class="form-select">
-                            <option selected>Light exercise/ sports 1 – 3 days/ week</option>
-                            <option>Moderate exercise 3–5 days/week</option>
-                            <option>Hard exercise 6–7 days/week</option>
-                        </select>
-                    </div>
-
-                    <!-- TODO -->
-                    <button type="submit" class="btn btn-primary w-100">Calculate</button>
-                </form>
+                </div>
+                <button id="btn-calc-bmi" class="btn btn-primary w-100">Calculate</button>
+                <div class="mt-2 text-end">
+                    <strong>BMI</strong>: Body Mass Index</small>
+                </div>
             </div>
         </div>
     </div>
@@ -280,6 +268,38 @@
             } else {
                 $profileImg.attr('src', originalSrc);
             }
+        });
+
+        // Calculate BMI
+        $('#btn-calc-bmi').on('click', function () {
+            const weight = parseFloat($('#weightInput').val());
+            let height = parseFloat($('#heightInput').val());
+            height = height / 100;
+
+            const $container = $('#bmi-result-container');
+            const $result = $('#bmi-result');
+
+            $container.removeClass('d-none bmi-underweight bmi-healthy bmi-overweight bmi-obese');
+
+            if (weight > 0 && height > 0) {
+              const bmi = weight / (height * height);
+              const rounded = bmi.toFixed(2);
+              $result.text(`BMI: ${rounded}`);
+
+              if (bmi < 18.5) {
+                $container.addClass('bmi-underweight');
+              } else if (bmi < 25) {
+                $container.addClass('bmi-healthy');
+              } else if (bmi < 30) {
+                $container.addClass('bmi-overweight');
+              } else {
+                $container.addClass('bmi-obese');
+              }
+            } else {
+              $result.text('Please enter valid weight and height');
+            }
+
+            $container.removeClass('d-none');
         });
     });
 </script>
