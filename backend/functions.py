@@ -1,41 +1,44 @@
-from flask import request, jsonify, render_template, session, redirect, url_for, flash, current_app
-from .models import db, User, ExerciseLog, Achievement
+from flask import abort, request, jsonify, render_template, session, redirect, url_for, flash, current_app
+from .models import db, User, ExerciseLog, Achievement, FriendRequest
 from functools import wraps
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
-from werkzeug.security import check_password_hash
 import os
+from flask_login import login_user
+from flask_login import current_user
 from .forms import LoginForm, RegistrationForm
 
-def handle_login(): # Handles user login
+
+def handle_login():  # Handles user login
     form = LoginForm()
-    
+
     if request.method == 'POST':
         if form.validate_on_submit():
             username = form.username.data
             password = form.password.data
-            
+
             # Check if the user is an admin
             if is_admin(username, password):
                 session['admin'] = True
                 return jsonify(success=True, redirect='/admin')
-            
+
             # Check if the user is a normal user
             user = User.query.filter((User.username == username) | (User.email == username)).first()
-            
+
             if user and user.check_password(password):
                 if not user.is_active:
                     return jsonify(success=False, message="Account is disabled. Please contact support.")
-                
+
                 # Update the last login timestamp
                 user.last_login = datetime.utcnow()
-                
+
                 try:
                     db.session.commit()
-                    
+
                     # Set the session
                     session['user_id'] = user.id
-                    
+                    login_user(user)
+
                     return jsonify(success=True, redirect='/dashboard')
                 except Exception as e:
                     db.session.rollback()
@@ -45,28 +48,28 @@ def handle_login(): # Handles user login
         else:
             errors = {field.name: field.errors for field in form if field.errors}
             return jsonify(success=False, message="Validation failed", errors=errors)
-    
+
     return render_template('login.html', form=form)
 
 
-def handle_register(): # Handles user registration
+def handle_register():  # Handles user registration
     form = RegistrationForm()
-    
+
     if request.method == 'POST':
         if form.validate_on_submit():
             username = form.username.data
             email = form.email.data
             password = form.password.data
             phone = form.phone.data
-            
+
             # Create new user
             new_user = User(
-                username=username, 
+                username=username,
                 email=email,
                 phone=phone
             )
             new_user.set_password(password)
-            
+
             try:
                 db.session.add(new_user)
                 db.session.commit()
@@ -79,20 +82,21 @@ def handle_register(): # Handles user registration
             errors = {}
             for field_name, field_errors in form.errors.items():
                 errors[field_name] = field_errors
-            
+
             # 
             if 'username' in errors and any('already exists' in err.lower() for err in errors['username']):
-                return jsonify(success=False, message="User has already existed, please choose another username.", errors=errors)
-            
+                return jsonify(success=False, message="User has already existed, please choose another username.",
+                               errors=errors)
+
             return jsonify(success=False, message="Validation failed", errors=errors)
-    
+
     return render_template('register.html', form=form)
 
 
 # This function checks if the user is an admin.
 def is_admin(username, password):
-    admin_username = os.environ.get('ADMIN_USERNAME', 'admin') # Default to 'admin' if not set in environment variables
-    admin_password = os.environ.get('ADMIN_PASSWORD', 'admin') 
+    admin_username = os.environ.get('ADMIN_USERNAME', 'admin')  # Default to 'admin' if not set in environment variables
+    admin_password = os.environ.get('ADMIN_PASSWORD', 'admin')
     return username == admin_username and password == admin_password
 
 
@@ -103,6 +107,7 @@ def login_required(f):
         if 'user_id' not in session:
             return redirect(url_for('login'))
         return f(*args, **kwargs)
+
     return decorated_function
 
 
@@ -140,12 +145,13 @@ def init_dashboard():
         )
     return render_template('login.html')
 
+
 def connect_db_to_charts():
     user_id = session['user_id']
 
     today = datetime.utcnow().date()
-    past_7_days = [today - timedelta(days = i) for i in range(6,-1,-1)]
-    past_100_days = [today - timedelta(days = i) for i in range(99,-1,-1)]
+    past_7_days = [today - timedelta(days=i) for i in range(6, -1, -1)]
+    past_100_days = [today - timedelta(days=i) for i in range(99, -1, -1)]
 
     p7d_logs = ExerciseLog.query.filter(ExerciseLog.user_id == user_id, ExerciseLog.date >= past_7_days[0]).all()
     p100d_logs = ExerciseLog.query.filter(ExerciseLog.user_id == user_id, ExerciseLog.date >= past_100_days[0]).all()
@@ -188,7 +194,7 @@ def init_profile():
 
     # Get the current user from the session
     user = User.query.get(session['user_id'])
-    
+
     # Handle profile update when the form is submitted (POST method)
     if request.method == 'POST':
         current_password = request.form.get('current_password')
@@ -234,13 +240,12 @@ def init_profile():
                 old_path = os.path.join(current_app.static_folder, user.avatar_path)
                 if os.path.exists(old_path):
                     os.remove(old_path)
-    
+
             # Save the new profile image
             filename = secure_filename(new_profile_image.filename)
             new_path = os.path.join(upload_folder, filename)
             new_profile_image.save(new_path)
             user.avatar_path = f'uploads/{filename}'
-
 
         if new_username:
             user.username = new_username
@@ -284,28 +289,33 @@ def init_profile():
     return render_template('profile.html')
 
 
+def view_profile(username):
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        abort(404, description="User not found")
+    if current_user.is_authenticated and user.id == current_user.id:
+        return redirect(url_for('profile'))
+    return render_template('view-profile.html', profile_user=user)
+
+
 def init_sharing():
-    if request.method == 'GET':
-        # TODO
-        # Dummy data for shared datasets
-        shared_data = [
-            {
-                'title': f'Dataset {i+1}',
-                'user_name': f'User {i+1}',
-                'user_email': f'user{i+1}@example.com',
-                'shared_date': datetime(2024, 4, (i % 30) + 1).strftime('%d/%m/%Y')
-            }
-            for i in range(20)
-        ]
-        return render_template('sharing.html', shared_data = shared_data)
-    return render_template('login.html')
+    friends = current_user.friends()
+    shared_data = [
+        {
+            'username': f.username,
+            'email': f.email,
+            'avatar_path': f.avatar_path or 'asset/avatar.png'
+        }
+        for f in friends
+    ]
+    return render_template('sharing.html', shared_data=shared_data)
 
 
 def handle_exercise_log():
     # Ensure the user is logged in
     if 'user_id' not in session:
         return redirect(url_for('login'))
-        
+
     user_id = session['user_id']
 
     if request.method == 'POST':
@@ -320,8 +330,8 @@ def handle_exercise_log():
 
         # achievement for each type
         thresholds = range(500, 5001, 500)
-        sum_type_duration = db.session.query(db.func.sum(ExerciseLog.duration))\
-            .filter_by(user_id=user_id, exercise_type=exercise_type).scalar() or 0
+        sum_type_duration = db.session.query(db.func.sum(ExerciseLog.duration)) \
+                                .filter_by(user_id=user_id, exercise_type=exercise_type).scalar() or 0
 
         for threshold in thresholds:
             # check if the achievement already exists
@@ -342,8 +352,8 @@ def handle_exercise_log():
         # achievement for all types
         # calculate the total duration for all exercise types
         # check if the achievement already exists
-        sum_all_duration = db.session.query(db.func.sum(ExerciseLog.duration))\
-            .filter_by(user_id=user_id).scalar() or 0
+        sum_all_duration = db.session.query(db.func.sum(ExerciseLog.duration)) \
+                               .filter_by(user_id=user_id).scalar() or 0
 
         for threshold in thresholds:
             existing_all = Achievement.query.filter_by(
@@ -368,7 +378,46 @@ def handle_exercise_log():
 
 
 def handle_achievement():
-        user_id = session['user_id']
-        achievements = Achievement.query.filter_by(user_id=user_id)\
-            .order_by(Achievement.achieved_at.desc()).all()
-        return render_template('achievement.html', achievements=achievements)
+    user_id = session['user_id']
+    achievements = Achievement.query.filter_by(user_id=user_id) \
+        .order_by(Achievement.achieved_at.desc()).all()
+    return render_template('achievement.html', achievements=achievements)
+
+
+def handle_add_friend(user_id):
+    target_user = User.query.get_or_404(user_id)
+
+    if current_user.id == user_id:
+        flash("You can't send a friend request to yourself.", 'warning')
+    elif current_user.has_pending_request_to(target_user):
+        flash("Friend request already sent.", 'info')
+    elif current_user.has_pending_request_from(target_user):
+        request = FriendRequest.query.filter_by(sender_id=user_id, receiver_id=current_user.id,
+                                                status='pending').first()
+        request.status = 'accepted'
+        db.session.commit()
+        flash("Friend request accepted automatically!", 'success')
+    elif current_user.is_friend_with(target_user):
+        flash("You are already friends.", 'info')
+    else:
+        fr = FriendRequest(sender_id=current_user.id, receiver_id=user_id)
+        db.session.add(fr)
+        db.session.commit()
+        flash("Friend request sent!", 'success')
+
+    return redirect(url_for('view_others', username=target_user.username))
+
+
+def handle_respond_request(user_id, response):
+    fr = FriendRequest.query.filter_by(sender_id=user_id, receiver_id=current_user.id,
+                                       status='pending').first_or_404()
+    sender_user = User.query.get_or_404(user_id)
+    if response == 'accept':
+        fr.status = 'accepted'
+        flash("Friend request accepted!", 'success')
+    elif response == 'deny':
+        fr.status = 'denied'
+        flash("Friend request denied.", 'info')
+
+    db.session.commit()
+    return redirect(url_for('view_others', username=sender_user.username))

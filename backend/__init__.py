@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_migrate import Migrate
+from flask_login import LoginManager
 from .models import db
 from .config import Config
 from flask import session
@@ -29,7 +29,13 @@ def create_app():
         pass
 
     db.init_app(app)
-    migrate = Migrate(app, db)
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+
+    # Define user loader
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
     # ✅ Auto-create DB if it doesn't exist
     with app.app_context():

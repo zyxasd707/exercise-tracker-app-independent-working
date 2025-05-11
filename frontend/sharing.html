@@ -5,25 +5,27 @@
 {% block page_title %}Sharing{% endblock %}
 
 {% block content %}
-<div class="main-content-boxes sharing">
+<div class="main-content-boxes sharing h-100">
+    {% if shared_data|length == 0 %}
+    <div class="d-flex flex-column justify-content-center align-items-center gap-4" style="height: calc(100vh - 200px);">
+        <i class="fa-solid fa-user-group" style="font-size: 6rem;"></i>
+        <h5 class="text-secondary">Your friend list is empty</h5>
+    </div>
+    {% endif %}
     <div class="container py-5">
-        <!-- TODO -->
         <div class="grid-container">
-            {% for data in shared_data %}
-            <div class="card">
+            {% for user in shared_data %}
+            <div class="card card-hover">
                 <div class="dataset-title text-center">
                     <img
                         class="avatar mb-3"
                         width="100"
-                        src="{{ url_for('static', filename='asset/avatar.png') }}"
+                        src="{{ url_for('static', filename=user.avatar_path) }}"
                         alt="No image"
                     />
-                    <h4>{{ data.user_name }}</h4>
-                    <p>{{ data.user_email }}</p>
+                    <h4>{{ user.username }}</h4>
+                    <p>{{ user.email }}</p>
                 </div>
-                <div class="text-muted">🏆 Finished in <strong>48 minutes</strong> on <strong>March 10, 2024</strong>.<br>
-                    Logged with Garmin Tracker.</div>
-                <div class="share-time small mt-2">{{ data.shared_date }}</div>
             </div>
             {% endfor %}
         </div>
