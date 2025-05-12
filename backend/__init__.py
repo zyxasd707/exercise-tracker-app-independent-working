@@ -53,8 +53,9 @@ def create_app():
     def inject_user():
         user = None
         if 'user_id' in session:
-            user = User.query.get(session['user_id'])
-            if not user.avatar_path:
+            user = db.session.get(User, session['user_id'])
+            # Check if the user exists before accessing the avatar path.
+            if user and not user.avatar_path:
                 user.avatar_path = 'asset/avatar.png'
         return dict(user=user)
 
