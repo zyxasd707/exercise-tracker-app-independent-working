@@ -54,11 +54,43 @@ venv\Scripts\activate
 ```bash
 pip install -r requirements.txt
 ```
+#### 3.1 Test Processes
+
+- ##### Unit Tests
+
+  ```bash
+  #Run all unit tests.
+  
+  python -m pytest tests/unit/
+  
+  # Run a specific test file.
+  
+  python -m pytest tests/unit/test_chart_data.py
+  python -m pytest tests/unit/test_exercise_log.py
+  python -m pytest tests/unit/test_exercise_routes.py
+  python -m pytest tests/unit/test_user_model.py
+  python -m pytest tests/unit/test_user_model.py
+  
+  # Run a specific test method.
+  
+  python -m pytest tests/unit/test_user_model.py::TestUserModel::test_password_hashing
+  ```
+
+- ##### Selenium Tests
+
+  ```bash
+  
+  ```
+
+  
+
 ### 4. Run the Flask Application
+
 ```bash
 python run.py
 ```
-### 5. Result
+### 5. Results
+
 ```
 http://127.0.0.1:5000
 http://localhost:5000
@@ -69,58 +101,79 @@ http://localhost:5000
 - Always activate your virtual environment before running the app or installing dependencies.
 
 ## 📁 Sample Folder Structure (to be updated)
-```
+```bash
 exercise-tracker-app/
 │
 ├── backend/
-│   ├── __init__.py
-│   ├── functions.py
-│   ├── models.py
-│   └── routes.py
+│   ├── __init__.py        # App initialization, configuration and context handling
+│   ├── config.py          # Configuration settings
+│   ├── functions.py       # Core business logic functions
+│   ├── models.py          # Database model definitions
+│   └── routes.py          # Route definitions and handlers
 │
 ├── frontend/
 │   ├── asset/
-│   │   ├── avatar.png
-│   │   ├── favicon.ico
-│   │   ├── landing.png
-│   │   └── welcome.png
+│   │   ├── avatar.png     # Default avatar
+│   │   ├── favicon.ico    # Website icon
+│   │   ├── landing.png    # Landing page image
+│   │   └── welcome.png    # Welcome page image
 │   │
 │   ├── css/
-│   │   ├── common.css
-│   │   ├── index.css
-│   │   ├── main.css
-│   │   ├── mobile.css
-│   │   └── presets.css
+│   │   ├── common.css     # Common styles
+│   │   ├── dashboard.css  # Dashboard styles
+│   │   ├── index.css      # Index page styles
+│   │   ├── main.css       # Main styles
+│   │   ├── mobile.css     # Mobile responsive styles
+│   │   └── presets.css    # Preset styles
 │   │
 │   ├── script/
-│   │   ├── common.js
-│   │   ├── dashboard.js
-│   │   ├── login.js
-│   │   ├── main.js
-│   │   └── register.js
+│   │   ├── common.js      # Common JavaScript functionality
+│   │   ├── dashboard.js   # Dashboard page functionality
+│   │   ├── login.js       # Login page functionality
+│   │   ├── main.js        # Main JavaScript functionality
+│   │   └── register.js    # Registration page functionality
 │   │
-│   ├── achievement.html
-│   ├── base.html
-│   ├── dashboard.html
-│   ├── exercise_log.html
-│   ├── index.html
-│   ├── login.html
-│   ├── main-base.html
-│   ├── profile.html
-│   ├── register.html
-│   └── sharing.html
+│   ├── achievement.html   # Achievement page template
+│   ├── base.html          # Base HTML template
+│   ├── dashboard.html     # Dashboard page template
+│   ├── exercise_log.html  # Exercise log page template
+│   ├── index.html         # Index page template
+│   ├── login.html         # Login page template
+│   ├── main-base.html     # Main base template
+│   ├── profile.html       # Profile page template
+│   ├── register.html      # Registration page template
+│   ├── sharing.html       # Sharing page template
+│   └── view-profile.html  # View profile page template
+│
+├── migrations/
+│   ├── versions/
+│   │   └── 5bd54c75d185_add_last_login_and_is_active_fields_to_.py  # Migration script
+│   │
+│   ├── alembic.ini        # Alembic configuration
+│   ├── env.py             # Environment setup for migrations
+│   ├── README             # Migration documentation
+│   └── script.py.mako     # Template for migration scripts
 │
 ├── tests/
 │   ├── selenium/
-│   │   └── test_homepage.py
+│   │   └── test_homepage.py  # Homepage Selenium tests
 │   │
 │   └── unit/
-│       └── test_logic.py
+│       ├── test_chart_data.py      # Chart data unit tests
+│       ├── test_exercise_log.py    # Exercise log unit tests
+│       ├── test_exercise_routes.py # Exercise routes unit tests
+│       ├── test_user_model.py      # User model unit tests
+│       └── test_user_routes.py     # User routes unit tests
 │
-├── run.py
-├── README.md
-└── requirements.txt
-
+├── instance/              # Instance-specific data (SQLite database)
+│   └── app.db             # SQLite database file
+│
+├── run.py                # Application entry point
+├── run_tests.py          # Test runner script
+├── README.md             # Project documentation
+├── requirements.txt      # Project dependencies
+├── .env.example          # Example environment variables
+└── .gitignore            # Git ignore configuration
 ```
 
 ## 📃 License
